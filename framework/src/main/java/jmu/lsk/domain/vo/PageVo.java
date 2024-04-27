@@ -4,14 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//返回给前端的特定字段
-public class CategoryVo {
+public class PageVo {
 
-    private Long id;
-
-    private String name;
+    private List rows;
+    private Long total;
 
 }

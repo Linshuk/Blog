@@ -1,4 +1,4 @@
-package jmu.lsk.blog.controller;
+package jmu.lsk.controller;
 
 import jmu.lsk.domain.ResponseResult;
 import jmu.lsk.domain.entity.Article;
@@ -22,22 +22,17 @@ public class ArticleController {
     //注入公共模块的ArticleService接口
     private ArticleService articleService;
 
-    //----------------------------------测试mybatisPlus---------------------------------
-
-    @GetMapping("/list")
-    //Article是公共模块的实体类
-    public List<Article> test(){
-        //查询数据库的所有数据
-        return articleService.list();
-    }
-
-    //----------------------------------测试统一响应格式-----------------------------------
-
     @GetMapping("/hotArticleList")
     //ResponseResult是huanf-framework工程的domain目录的类
     public ResponseResult hotArticleList(){
         //查询热门文章，封装成ResponseResult返回
         ResponseResult result = articleService.hotArticleList();
         return result;
+    }
+
+    @GetMapping("/articleList")
+    //ResponseResult是huanf-framework工程的domain目录的类
+    public ResponseResult articleList(Integer pageNum,Integer pageSize,Long categoryId){
+        return articleService.articleList(pageNum,pageSize,categoryId);
     }
 }

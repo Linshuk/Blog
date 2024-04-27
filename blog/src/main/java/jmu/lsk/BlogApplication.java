@@ -1,4 +1,4 @@
-package jmu.lsk.blog;
+package jmu.lsk;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
