@@ -2,6 +2,7 @@ package jmu.lsk.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import jmu.lsk.domain.entity.Link;
+import org.apache.ibatis.annotations.Mapper;
 
 
 /**
@@ -10,6 +11,7 @@ import jmu.lsk.domain.entity.Link;
  * @author makejava
  * @since 2024-04-27 23:45:38
  */
+@Mapper
 public interface LinkMapper extends BaseMapper<Link> {
 
 }

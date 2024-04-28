@@ -10,6 +10,7 @@ import jmu.lsk.domain.vo.LinkVo;
 import jmu.lsk.mapper.LinkMapper;
 import jmu.lsk.service.LinkService;
 import jmu.lsk.utils.BeanCopyUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
  */
 @Service("linkService")
 public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements LinkService {
+
 
     @Override
     public ResponseResult getAllLink() {
