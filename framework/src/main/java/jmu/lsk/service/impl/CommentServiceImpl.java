@@ -3,6 +3,7 @@ package jmu.lsk.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jmu.lsk.constants.SystemConstants;
 import jmu.lsk.domain.ResponseResult;
 import jmu.lsk.domain.entity.Comment;
 import jmu.lsk.domain.vo.CategoryVo;
@@ -35,9 +36,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     SysUserService sysUserService;
 
     @Override
-    public ResponseResult commentList(Long articleId, Integer pageNum, Integer pageSize) {
+    public ResponseResult commentList(String commentType,Long articleId, Integer pageNum, Integer pageSize) {
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Comment::getArticleId,articleId);
+        queryWrapper.eq(SystemConstants.ARTICLE_COMMENT.equals(commentType),Comment::getArticleId,articleId);
+        queryWrapper.eq(Comment::getType,commentType);
         queryWrapper.eq(Comment::getRootId,-1);
         Page<Comment> page = new Page(pageNum,pageSize);
         page(page,queryWrapper);
