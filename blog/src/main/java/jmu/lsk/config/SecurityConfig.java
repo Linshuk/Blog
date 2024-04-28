@@ -50,7 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 // 对于登录接口 允许匿名访问
-                .antMatchers("/link/getAllLink").authenticated()
+                //退出登录的配置。如果'没登录'就调用'退出登录'，就会报错，报的错设置为'401 需要登录后操作'，也就是authenticated
+                .antMatchers("/logout").authenticated()
                 .antMatchers("/login").anonymous()
                 // 除上面外的所有请求全部不需要认证即可访问
                 .anyRequest().permitAll();

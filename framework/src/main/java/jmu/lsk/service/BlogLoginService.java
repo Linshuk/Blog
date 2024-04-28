@@ -14,4 +14,6 @@ import jmu.lsk.domain.entity.SysUser;
 public interface BlogLoginService extends IService<SysUser> {
 
     ResponseResult login(SysUser user);
+
+    ResponseResult logout();
 }
