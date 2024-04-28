@@ -11,6 +11,7 @@ import jmu.lsk.service.ArticleService;
 import jmu.lsk.service.CategoryService;
 import jmu.lsk.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import jmu.lsk.domain.entity.Category;
 
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
 
     @Autowired
+    @Lazy
     //ArticleService是我们在huanf-framework写的接口
     private ArticleService articleService;
 

@@ -3,6 +3,7 @@ package jmu.lsk.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import jmu.lsk.domain.ResponseResult;
 import jmu.lsk.domain.entity.Category;
+import org.springframework.context.annotation.Lazy;
 
 /**
  * 分类表(Category)表服务接口

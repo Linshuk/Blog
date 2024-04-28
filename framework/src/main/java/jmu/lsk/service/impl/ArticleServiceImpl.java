@@ -7,16 +7,25 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jmu.lsk.constants.SystemConstants;
 import jmu.lsk.domain.ResponseResult;
 import jmu.lsk.domain.entity.Article;
+import jmu.lsk.domain.entity.Category;
+import jmu.lsk.domain.vo.ArticleDetailVo;
 import jmu.lsk.domain.vo.ArticleListVo;
 import jmu.lsk.domain.vo.HotArticleVo;
 import jmu.lsk.domain.vo.PageVo;
 import jmu.lsk.mapper.ArticleMapper;
+import jmu.lsk.mapper.CategoryMapper;
 import jmu.lsk.service.ArticleService;
+import jmu.lsk.service.CategoryService;
 import jmu.lsk.utils.BeanCopyUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 文章表(Article)表服务实现类
@@ -26,6 +35,10 @@ import java.util.Objects;
  */
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
+    @Autowired
+    @Lazy
+    CategoryService categoryService;
+
     @Override
     public ResponseResult hotArticleList() {
 
@@ -63,10 +76,36 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         page(page,lambdaQueryWrapper);
 
         //把最后的查询结果封装成ArticleListVo(我们写的实体类)。BeanCopyUtils是我们写的工具类
+        List<Article> articles = page.getRecords();
+        articles.stream()
+                .map(article -> article.setCategoryName(categoryService.getById(article.getCategoryId()).getName()))
+                .collect(Collectors.toList());
         List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(page.getRecords(), ArticleListVo.class);
 
         //把上面那行的查询结果和文章总数封装在PageVo(我们写的实体类)
         PageVo pageVo = new PageVo(articleListVos,page.getTotal());
         return ResponseResult.okResult(pageVo);
     }
-}
+
+    @Override
+    public ResponseResult getArticleDetail(Long id) {
+
+            //根据id查询文章
+            Article article = getById(id);
+
+            //把最后的查询结果封装成ArticleListVo(我们写的实体类)。BeanCopyUtils是我们写的工具类
+                       ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
+
+            //根据分类id，来查询分类名
+            Long categoryId = articleDetailVo.getCategoryId();
+            Category category = categoryService.getById(categoryId);
+            //如果根据分类id查询的到分类名，那么就把查询到的值设置给ArticleDetailVo实体类的categoryName字段
+            if(category!=null){
+                articleDetailVo.setCategoryName(category.getName());
+            }
+
+            //封装响应返回。ResponseResult是我们在huanf-framework工程的domain目录写的实体类
+            return ResponseResult.okResult(articleDetailVo);
+        }
+    }
+

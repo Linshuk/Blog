@@ -3,11 +3,15 @@ package jmu.lsk.domain.entity;
 import java.util.Date;
 
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.experimental.Accessors;
+
 /**
  * 文章表(Article)表实体类
  *
@@ -19,6 +23,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("article")
+@Accessors(chain = true)
 public class Article  {
     @TableId
     private Long id;
@@ -37,6 +42,10 @@ public class Article  {
     private String isTop;
     //状态（0已发布，1草稿）
     private String status;
+
+    @TableField(exist = false)//代表这个字段在数据库中不存在，避免MyBatisPlus在查询时报错
+    private String categoryName;
+
     //访问量
     private Long viewCount;
     //是否允许评论 1是，0否

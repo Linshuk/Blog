@@ -5,6 +5,7 @@ import jmu.lsk.domain.entity.Article;
 import jmu.lsk.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,5 +35,13 @@ public class ArticleController {
     //ResponseResult是huanf-framework工程的domain目录的类
     public ResponseResult articleList(Integer pageNum,Integer pageSize,Long categoryId){
         return articleService.articleList(pageNum,pageSize,categoryId);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseResult getArticleDetail(@PathVariable("id") Long id) {//注解里指定的id跟上一行保持一致
+
+        //根据id查询文章详情
+        return articleService.getArticleDetail(id);
+
     }
 }

@@ -3,7 +3,7 @@ package jmu.lsk.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import jmu.lsk.domain.ResponseResult;
 import jmu.lsk.domain.entity.Article;
-
+import org.springframework.context.annotation.Lazy;
 
 
 /**
@@ -16,4 +16,8 @@ public interface ArticleService extends IService<Article> {
     ResponseResult hotArticleList();
 
     ResponseResult articleList(Integer pageNum, Integer pageSize, Long categoryId);
+
+    //根据id查询文章详情
+    ResponseResult getArticleDetail(Long id);
 }
+
