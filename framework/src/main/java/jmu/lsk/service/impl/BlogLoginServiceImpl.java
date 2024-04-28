@@ -7,6 +7,8 @@ import jmu.lsk.domain.ResponseResult;
 import jmu.lsk.domain.entity.SysUser;
 import jmu.lsk.domain.vo.BlogUserLoginVo;
 import jmu.lsk.domain.vo.UserInfoVo;
+import jmu.lsk.enums.AppHttpCodeEnum;
+import jmu.lsk.exception.SystemException;
 import jmu.lsk.mapper.SysUserMapper;
 import jmu.lsk.service.BlogLoginService;
 import jmu.lsk.utils.BeanCopyUtils;
@@ -17,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -37,6 +40,11 @@ public class BlogLoginServiceImpl extends ServiceImpl<SysUserMapper, SysUser> im
 
     @Override
     public ResponseResult login(SysUser user) {
+        //如果用户在进行登录时，没有传入'用户名'
+        if(!StringUtils.hasText(user.getUserName())){
+            // 提示'必须要传用户名'。AppHttpCodeEnum是我们写的枚举类。SystemException是我们写的统一异常处理的类
+            throw new SystemException(AppHttpCodeEnum.REQUIRE_USERNAME);
+        }
         //封装登录的用户名和密码
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUserName(),user.getPassword());
         //在下一行之前，封装的数据会先走UserDetailsServiceImpl实现类，这个实现类在我们的huanf-framework工程的service/impl目录里面
