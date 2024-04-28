@@ -8,12 +8,15 @@ import jmu.lsk.domain.entity.Comment;
 import jmu.lsk.domain.vo.CategoryVo;
 import jmu.lsk.domain.vo.CommentVo;
 import jmu.lsk.domain.vo.PageVo;
+import jmu.lsk.enums.AppHttpCodeEnum;
+import jmu.lsk.exception.SystemException;
 import jmu.lsk.mapper.CommentMapper;
 import jmu.lsk.service.CommentService;
 import jmu.lsk.service.SysUserService;
 import jmu.lsk.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.function.Function;
@@ -42,6 +45,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         return ResponseResult.okResult(new PageVo(commentVoList,page.getTotal()));
     }
+
+    @Override
+    public ResponseResult addComment(Comment comment) {
+        if(!StringUtils.hasText(comment.getContent())){
+            throw new SystemException(AppHttpCodeEnum.CONTENT_NOT_NULL);
+        }
+        save(comment);
+        return ResponseResult.okResult();
+    }
+
     private List<CommentVo> getChildren(Long id) {
 
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
