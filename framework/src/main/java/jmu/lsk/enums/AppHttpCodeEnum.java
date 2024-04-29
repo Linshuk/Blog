@@ -14,6 +14,8 @@ public enum AppHttpCodeEnum {
     LOGIN_ERROR(505,"用户名或密码错误"),
     FILE_TYPE_ERROR(507,"文件类型错误"),
     UPLOAD_ERROR(409,"上传失败"),
+    ERROR_PARAM(508, "无效参数"),
+    NICKNAME_EXIST(501,"昵称已存在"),
     CONTENT_NOT_NULL(506,"评论不能为空");
     int code;
     String msg;

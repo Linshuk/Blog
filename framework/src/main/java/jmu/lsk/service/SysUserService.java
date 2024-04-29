@@ -8,4 +8,6 @@ public interface SysUserService extends IService<SysUser> {
     ResponseResult userInfo();
 
     ResponseResult updateUserInfo(SysUser user);
+
+    ResponseResult register(SysUser user);
 }

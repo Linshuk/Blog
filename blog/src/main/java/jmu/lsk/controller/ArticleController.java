@@ -4,10 +4,7 @@ import jmu.lsk.domain.ResponseResult;
 import jmu.lsk.domain.entity.Article;
 import jmu.lsk.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,6 +39,10 @@ public class ArticleController {
 
         //根据id查询文章详情
         return articleService.getArticleDetail(id);
+    }
 
+    @PutMapping("/updateViewCount/{id}")
+    public ResponseResult updateViewCount(@PathVariable("id") Long id){
+        return articleService.updateViewCount(id);
     }
 }

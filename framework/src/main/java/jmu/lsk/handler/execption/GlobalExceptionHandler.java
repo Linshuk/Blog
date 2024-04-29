@@ -5,10 +5,14 @@ import jmu.lsk.domain.ResponseResult;
 import jmu.lsk.enums.AppHttpCodeEnum;
 import jmu.lsk.exception.SystemException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.stream.Collectors;
 
 //@ControllerAdvice //对controller层的增强
 //@ResponseBody
@@ -43,4 +47,14 @@ public class GlobalExceptionHandler {
         //从异常对象中获取提示信息封装，然后返回。ResponseResult、AppHttpCodeEnum是我们写的类
         return ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR.getCode(),e.getMessage());//枚举值是500
     }
+
+    //Validation的异常
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseResult validationExceptionHandler(MethodArgumentNotValidException e){
+        return 	ResponseResult.errorResult(AppHttpCodeEnum.ERROR_PARAM.getCode(), e.getBindingResult().getAllErrors().stream()
+                .map(ObjectError::getDefaultMessage)
+                .collect(Collectors.joining("; "))
+        );
+    }
+
 }

@@ -17,6 +17,7 @@ import jmu.lsk.mapper.CategoryMapper;
 import jmu.lsk.service.ArticleService;
 import jmu.lsk.service.CategoryService;
 import jmu.lsk.utils.BeanCopyUtils;
+import jmu.lsk.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -89,10 +90,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public ResponseResult getArticleDetail(Long id) {
-
             //根据id查询文章
             Article article = getById(id);
 
+            Integer viewCount = redisCache.getCacheMapValue("article:viewCount",id.toString());
+            article.setViewCount(viewCount.longValue());
             //把最后的查询结果封装成ArticleListVo(我们写的实体类)。BeanCopyUtils是我们写的工具类
                        ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
 
@@ -107,5 +109,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             //封装响应返回。ResponseResult是我们在huanf-framework工程的domain目录写的实体类
             return ResponseResult.okResult(articleDetailVo);
         }
+
+        @Autowired
+    RedisCache redisCache;
+
+    @Override
+    public ResponseResult updateViewCount(Long id) {
+        redisCache.incrementCacheMapValue("article:viewCount",id.toString(),1);
+        return ResponseResult.okResult();
     }
+}
 

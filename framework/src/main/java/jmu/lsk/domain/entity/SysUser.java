@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import javax.validation.constraints.*;
+
 /**
  * 用户表(SysUser)表实体类
  *
@@ -24,16 +27,23 @@ public class SysUser  {
     private Long id;
 
     //用户名
+    @NotBlank(message = "用户名不能为空")
     private String userName;
     //昵称
+    @NotBlank(message = "昵称不能为空")
     private String nickName;
     //密码
+    @NotBlank(message = "密码不能为空")
+    @Size(min=6,max=12,message = "密码长度错误")
+    @Pattern(regexp = "^[a-zA-Z0-9_]*$",message = "密码格式错误")
     private String password;
     //用户类型：0代表普通用户，1代表管理员
     private String type;
     //账号状态（0正常 1停用）
     private String status;
     //邮箱
+    @NotBlank(message = "邮箱不能为空")
+    @Email(message = "邮箱格式错误")
     private String email;
     //手机号
     private String phonenumber;
