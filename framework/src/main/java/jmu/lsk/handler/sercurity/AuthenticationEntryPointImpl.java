@@ -31,7 +31,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
         ResponseResult result = null;
         if(authException instanceof BadCredentialsException||authException instanceof InternalAuthenticationServiceException){
             //第一个参数返回的是响应码，AppHttpCodeEnum是我们写的实体类。第二个参数是返回具体的信息
-            result = ResponseResult.errorResult(AppHttpCodeEnum.LOGIN_ERROR.getCode(),authException.getMessage());
+            result = ResponseResult.errorResult(AppHttpCodeEnum.LOGIN_ERROR.getCode(),AppHttpCodeEnum.LOGIN_ERROR.getMsg());
         } else if(authException instanceof InsufficientAuthenticationException){
             //第一个参数返回的是响应码，AppHttpCodeEnum是我们写的实体类
             result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);

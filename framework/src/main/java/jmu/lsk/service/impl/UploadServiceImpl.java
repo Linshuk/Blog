@@ -18,10 +18,21 @@ public class UploadServiceImpl implements UploadService {
     FileStorageService fileStorageService;
 
     @Override
-    public ResponseResult uploadImg(MultipartFile img) {
+    public ResponseResult uploadHeadImg(MultipartFile img) {
         try {
             InputStream inputStream = img.getInputStream();
             String url = fileStorageService.uploadImgFile("head", img.getOriginalFilename(), inputStream);
+            return ResponseResult.okResult(url);
+        } catch (IOException e) {
+            throw new SystemException(AppHttpCodeEnum.UPLOAD_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseResult uploadArticleImg(MultipartFile img) {
+        try {
+            InputStream inputStream = img.getInputStream();
+            String url = fileStorageService.uploadImgFile("article", img.getOriginalFilename(), inputStream);
             return ResponseResult.okResult(url);
         } catch (IOException e) {
             throw new SystemException(AppHttpCodeEnum.UPLOAD_ERROR);

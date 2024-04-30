@@ -2,7 +2,7 @@ package jmu.lsk.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import jmu.lsk.domain.entity.Comment;
-import org.mapstruct.Mapper;
+import org.apache.ibatis.annotations.Mapper;
 
 
 /**

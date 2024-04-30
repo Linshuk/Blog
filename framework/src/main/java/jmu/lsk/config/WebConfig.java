@@ -54,4 +54,5 @@ public class WebConfig implements WebMvcConfigurer {
         //增加我们的消息转换器
         converters.add(fastJsonHttpMessageConverters());
     }
+
 }

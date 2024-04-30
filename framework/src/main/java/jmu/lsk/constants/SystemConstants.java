@@ -45,4 +45,10 @@ public class SystemConstants {
      * 评论类型为：友联评论
      */
     public static final String LINK_COMMENT = "1";
+
+    public static final Object MENU = "C";
+
+    public static final Object BUTTON = "F";
+
+    public static final String NORMAL = "0";
 }

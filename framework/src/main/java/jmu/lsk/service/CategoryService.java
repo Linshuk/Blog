@@ -3,7 +3,10 @@ package jmu.lsk.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import jmu.lsk.domain.ResponseResult;
 import jmu.lsk.domain.entity.Category;
+import jmu.lsk.domain.vo.CategoryVo;
 import org.springframework.context.annotation.Lazy;
+
+import java.util.List;
 
 /**
  * 分类表(Category)表服务接口
@@ -13,4 +16,6 @@ import org.springframework.context.annotation.Lazy;
  */
 public interface CategoryService extends IService<Category> {
     ResponseResult getCategoryList();
+
+    List<CategoryVo> listAllCategory();
 }

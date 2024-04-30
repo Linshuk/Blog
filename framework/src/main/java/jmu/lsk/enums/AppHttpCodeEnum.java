@@ -16,7 +16,8 @@ public enum AppHttpCodeEnum {
     UPLOAD_ERROR(409,"上传失败"),
     ERROR_PARAM(508, "无效参数"),
     NICKNAME_EXIST(501,"昵称已存在"),
-    CONTENT_NOT_NULL(506,"评论不能为空");
+    CONTENT_NOT_NULL(506,"评论不能为空"),
+    TAG_EXIST(501,"标签名已存在" );
     int code;
     String msg;
 

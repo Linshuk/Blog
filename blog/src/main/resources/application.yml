@@ -1,6 +1,9 @@
 server:
   port: 7777
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   redis:
     host: 192.168.200.130
     port: 6379

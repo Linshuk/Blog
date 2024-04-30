@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jmu.lsk.constants.SystemConstants;
 import jmu.lsk.domain.ResponseResult;
+import jmu.lsk.domain.dto.AddArticleDto;
 import jmu.lsk.domain.entity.Article;
+import jmu.lsk.domain.entity.ArticleTag;
 import jmu.lsk.domain.entity.Category;
 import jmu.lsk.domain.vo.ArticleDetailVo;
 import jmu.lsk.domain.vo.ArticleListVo;
@@ -15,12 +17,14 @@ import jmu.lsk.domain.vo.PageVo;
 import jmu.lsk.mapper.ArticleMapper;
 import jmu.lsk.mapper.CategoryMapper;
 import jmu.lsk.service.ArticleService;
+import jmu.lsk.service.ArticleTagService;
 import jmu.lsk.service.CategoryService;
 import jmu.lsk.utils.BeanCopyUtils;
 import jmu.lsk.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +83,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         //把最后的查询结果封装成ArticleListVo(我们写的实体类)。BeanCopyUtils是我们写的工具类
         List<Article> articles = page.getRecords();
         articles.stream()
-                .map(article -> article.setCategoryName(categoryService.getById(article.getCategoryId()).getName()))
+                .map(article -> {
+                    Integer viewCount = redisCache.getCacheMapValue("article:viewCount",article.getId().toString());
+                    article.setViewCount(viewCount.longValue());
+                    article.setCategoryName(categoryService.getById(article.getCategoryId()).getName());
+                    return article;
+                })
                 .collect(Collectors.toList());
         List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(page.getRecords(), ArticleListVo.class);
 
@@ -116,6 +125,26 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public ResponseResult updateViewCount(Long id) {
         redisCache.incrementCacheMapValue("article:viewCount",id.toString(),1);
+        return ResponseResult.okResult();
+    }
+
+    @Autowired
+    private ArticleTagService articleTagService;
+
+    @Override
+    @Transactional
+    public ResponseResult add(AddArticleDto articleDto) {
+        //添加 博客
+        Article article = BeanCopyUtils.copyBean(articleDto, Article.class);
+        save(article);
+
+
+        List<ArticleTag> articleTags = articleDto.getTags().stream()
+                .map(tagId -> new ArticleTag(article.getId(), tagId))
+                .collect(Collectors.toList());
+
+        //添加 博客和标签的关联
+        articleTagService.saveBatch(articleTags);
         return ResponseResult.okResult();
     }
 }
