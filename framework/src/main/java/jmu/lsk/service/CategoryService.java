@@ -2,6 +2,7 @@ package jmu.lsk.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import jmu.lsk.domain.ResponseResult;
+import jmu.lsk.domain.dto.CategoryDto;
 import jmu.lsk.domain.entity.Category;
 import jmu.lsk.domain.vo.CategoryVo;
 import org.springframework.context.annotation.Lazy;
@@ -20,4 +21,10 @@ public interface CategoryService extends IService<Category> {
     List<CategoryVo> listAllCategory();
 
     ResponseResult pageCategoryList(Integer pageNum, Integer pageSize, String name, String status);
+
+    ResponseResult putCategory(CategoryDto categoryDto);
+
+    ResponseResult deleteTag(Long id);
+
+    ResponseResult addCategory(CategoryDto categoryDto);
 }

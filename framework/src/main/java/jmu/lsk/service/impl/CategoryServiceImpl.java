@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jmu.lsk.constants.SystemConstants;
 import jmu.lsk.domain.ResponseResult;
+import jmu.lsk.domain.dto.CategoryDto;
 import jmu.lsk.domain.entity.Article;
 import jmu.lsk.domain.entity.Tag;
 import jmu.lsk.domain.vo.CategoryVo;
@@ -86,5 +87,26 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         //封装数据返回
         PageVo pageVo = new PageVo(page.getRecords(),page.getTotal());
         return ResponseResult.okResult(pageVo);
+    }
+
+    @Override
+    public ResponseResult putCategory(CategoryDto categoryDto) {
+        Category category = BeanCopyUtils.copyBean(categoryDto,Category.class);
+        updateById(category);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult deleteTag(Long id) {
+        CategoryMapper categoryMapper = getBaseMapper();
+        categoryMapper.deleteById(id);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult addCategory(CategoryDto categoryDto) {
+        Category category = BeanCopyUtils.copyBean(categoryDto,Category.class);
+        save(category);
+        return ResponseResult.okResult();
     }
 }

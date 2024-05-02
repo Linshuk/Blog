@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.models.auth.In;
 import jmu.lsk.domain.ResponseResult;
+import jmu.lsk.domain.dto.CategoryDto;
+import jmu.lsk.domain.dto.TagListDto;
 import jmu.lsk.domain.entity.Category;
 import jmu.lsk.domain.vo.CategoryVo;
 import jmu.lsk.domain.vo.ExcelCategoryVo;
@@ -16,11 +18,10 @@ import jmu.lsk.utils.BeanCopyUtils;
 import jmu.lsk.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -65,6 +66,34 @@ public class CategoryController {
     })
     public ResponseResult list(Integer pageNum,Integer pageSize,String name,String status){
         return categoryService.pageCategoryList(pageNum,pageSize,name,status);
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation(value = "获取分类")
+    @ApiImplicitParam(name = "id",value = "分类id")
+    public ResponseResult getTag(@PathVariable Long id){
+        return ResponseResult.okResult(categoryService.getById(id));
+    }
+
+    @PutMapping
+    @ApiOperation(value = "编辑分类")
+    @ApiImplicitParam(name = "categoryDto",value = "分类Dto")
+    public ResponseResult putTag(@RequestBody CategoryDto categoryDto){
+        return categoryService.putCategory(categoryDto);
+    }
+
+    @DeleteMapping("{id}")
+    @ApiOperation(value = "删除分类")
+    @ApiImplicitParam(name = "id",value = "分类id")
+    public ResponseResult deleteTag(@PathVariable Long id){
+        return categoryService.deleteTag(id);
+    }
+
+    @PostMapping
+    @ApiOperation(value = "添加分类")
+    @ApiImplicitParam(name = "categoryDto",value = "分类Dto")
+    public ResponseResult addTag(@RequestBody @Valid CategoryDto categoryDto){
+        return categoryService.addCategory(categoryDto);
     }
 
 }
