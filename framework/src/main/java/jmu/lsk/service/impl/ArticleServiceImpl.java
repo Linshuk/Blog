@@ -2,6 +2,7 @@ package jmu.lsk.service.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jmu.lsk.constants.SystemConstants;
@@ -10,26 +11,26 @@ import jmu.lsk.domain.dto.AddArticleDto;
 import jmu.lsk.domain.entity.Article;
 import jmu.lsk.domain.entity.ArticleTag;
 import jmu.lsk.domain.entity.Category;
+import jmu.lsk.domain.entity.Tag;
 import jmu.lsk.domain.vo.ArticleDetailVo;
 import jmu.lsk.domain.vo.ArticleListVo;
 import jmu.lsk.domain.vo.HotArticleVo;
 import jmu.lsk.domain.vo.PageVo;
 import jmu.lsk.mapper.ArticleMapper;
-import jmu.lsk.mapper.CategoryMapper;
+import jmu.lsk.mapper.ArticleTagMapper;
 import jmu.lsk.service.ArticleService;
 import jmu.lsk.service.ArticleTagService;
 import jmu.lsk.service.CategoryService;
 import jmu.lsk.utils.BeanCopyUtils;
 import jmu.lsk.utils.RedisCache;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -96,6 +97,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         PageVo pageVo = new PageVo(articleListVos,page.getTotal());
         return ResponseResult.okResult(pageVo);
     }
+    @Autowired
+    ArticleTagMapper articleTagMapper;
 
     @Override
     public ResponseResult getArticleDetail(Long id) {
@@ -114,6 +117,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             if(category!=null){
                 articleDetailVo.setCategoryName(category.getName());
             }
+            List<Long> articleTag = articleTagMapper.selectList(Wrappers.<ArticleTag>lambdaQuery().eq(ArticleTag::getArticleId,id))
+                            .stream()
+                                    .map(ArticleTag::getTagId)
+                                            .toList();
+            articleDetailVo.setTags(articleTag);
 
             //封装响应返回。ResponseResult是我们在huanf-framework工程的domain目录写的实体类
             return ResponseResult.okResult(articleDetailVo);
@@ -145,6 +153,38 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         //添加 博客和标签的关联
         articleTagService.saveBatch(articleTags);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult articleList(Integer pageNum, Integer pageSize, String title, String summary) {
+        LambdaQueryWrapper<Article> lambdaQueryWrapper = new LambdaQueryWrapper();
+        lambdaQueryWrapper.like(StringUtils.isNotBlank(title),Article::getTitle,title);
+        lambdaQueryWrapper.like(StringUtils.isNotBlank(summary),Article::getSummary,summary);
+
+        Page<Article> page = new Page<>(pageNum,pageSize);
+        page(page,lambdaQueryWrapper);
+
+        List<ArticleDetailVo> detailVos = BeanCopyUtils.copyBeanList(page.getRecords(),ArticleDetailVo.class);
+        PageVo pageVo = new PageVo(detailVos,page.getTotal());
+        return ResponseResult.okResult(pageVo);
+    }
+
+
+    @Override
+    public ResponseResult updateArticle(AddArticleDto addArticleDto){
+        Article article = BeanCopyUtils.copyBean(addArticleDto,Article.class);
+        List<ArticleTag> articleTags = addArticleDto.getTags().stream()
+                .map(tagId -> new ArticleTag(article.getId(), tagId))
+                .collect(Collectors.toList());
+        List<ArticleTag> tags = articleTagService.list(Wrappers.<ArticleTag>lambdaQuery().eq(ArticleTag::getArticleId,addArticleDto.getId()));
+        for (ArticleTag articleTag:tags
+             ) {
+            articleTagService.deleteByMultiId(articleTag);
+        }
+        articleTagService.saveOrUpdateBatchByMultiId(articleTags);
+        //添加 博客和标签的关联
+        updateById(article);
         return ResponseResult.okResult();
     }
 }

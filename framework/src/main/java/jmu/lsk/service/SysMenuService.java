@@ -1,7 +1,10 @@
 package jmu.lsk.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import jmu.lsk.domain.ResponseResult;
 import jmu.lsk.domain.entity.SysMenu;
+import jmu.lsk.domain.vo.MenuTreeVo;
+import jmu.lsk.domain.vo.RoleMenuTreeVo;
 
 import java.util.List;
 
@@ -17,4 +20,14 @@ public interface SysMenuService extends IService<SysMenu> {
     List<String> selectPermsByUserId(Long id);
 
     List<SysMenu> selectRouterMenuTreeByUserId(Long userId);
+
+    ResponseResult menuList(String status, String menuName);
+
+    ResponseResult updateMenu(SysMenu sysMenu);
+
+    ResponseResult deleteMenu(Long id);
+
+    List<MenuTreeVo> selectMenuTree(Long id);
+
+    RoleMenuTreeVo selectRoleMenuTree(Long id);
 }

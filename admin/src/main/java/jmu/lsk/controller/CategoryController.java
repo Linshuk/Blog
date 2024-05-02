@@ -2,6 +2,10 @@ package jmu.lsk.controller;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import jmu.lsk.domain.ResponseResult;
 import jmu.lsk.domain.entity.Category;
 import jmu.lsk.domain.vo.CategoryVo;
@@ -11,6 +15,7 @@ import jmu.lsk.service.CategoryService;
 import jmu.lsk.utils.BeanCopyUtils;
 import jmu.lsk.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +35,7 @@ public class CategoryController {
         return ResponseResult.okResult(list);
     }
 
+    @PreAuthorize("@ps.hasPermission('content:category:export')")
     @GetMapping("/export")
     public void export(HttpServletResponse response){
         try {
@@ -49,5 +55,16 @@ public class CategoryController {
             WebUtils.renderString(response, JSON.toJSONString(result));
         }
     }
-    
+    @GetMapping("/list")
+    @ApiOperation(value = "分类列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNum",value = "页号"),
+            @ApiImplicitParam(name = "pageSize",value = "每页大小"),
+            @ApiImplicitParam(name = "name",value = "分类名"),
+            @ApiImplicitParam(name = "status",value = "状态")
+    })
+    public ResponseResult list(Integer pageNum,Integer pageSize,String name,String status){
+        return categoryService.pageCategoryList(pageNum,pageSize,name,status);
+    }
+
 }

@@ -1,10 +1,13 @@
 package jmu.lsk.domain.vo;
 
+import jmu.lsk.domain.entity.ArticleTag;
+import jmu.lsk.domain.entity.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -24,6 +27,12 @@ public class ArticleDetailVo {
     //文章详情代码实现，新增了文章的内容，也就是详情
     private String content;
 
+    private String isTop;
+
+    private String isComment;
+
+    private String status;
+
     //所属分类名
     private String categoryName;
     //缩略图
@@ -33,4 +42,5 @@ public class ArticleDetailVo {
 
     private Date createTime;
 
+    private List<Long> tags;
 }

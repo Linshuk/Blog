@@ -1,7 +1,10 @@
 package jmu.lsk.domain.vo;
 
+import jmu.lsk.domain.entity.SysRole;
 import lombok.Data;
 import lombok.experimental.Accessors;
+
+import java.util.List;
 
 
 @Data

@@ -17,7 +17,10 @@ public enum AppHttpCodeEnum {
     ERROR_PARAM(508, "无效参数"),
     NICKNAME_EXIST(501,"昵称已存在"),
     CONTENT_NOT_NULL(506,"评论不能为空"),
-    TAG_EXIST(501,"标签名已存在" );
+    TAG_EXIST(501,"标签名已存在" ),
+    ERROR_PARENTMENU(509, "上级菜单不能选择自己"),
+    ERROR_EXISTCHLIDREN(509,"存在子菜单不能删除" ),
+    ERROR_OPERAION(500, "不能删除当前yonghu");
     int code;
     String msg;
 

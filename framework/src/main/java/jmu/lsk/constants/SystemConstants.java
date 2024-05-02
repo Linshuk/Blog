@@ -51,4 +51,6 @@ public class SystemConstants {
     public static final Object BUTTON = "F";
 
     public static final String NORMAL = "0";
+
+    public static final String ADMAIN = "1";
 }

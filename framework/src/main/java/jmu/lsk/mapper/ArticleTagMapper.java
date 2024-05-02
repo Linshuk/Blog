@@ -1,6 +1,8 @@
 package jmu.lsk.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.github.jeffreyning.mybatisplus.anno.MppMultiId;
+import com.github.jeffreyning.mybatisplus.base.MppBaseMapper;
 import jmu.lsk.domain.entity.ArticleTag;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,6 +14,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2024-04-30 18:41:16
  */
 @Mapper
-public interface ArticleTagMapper extends BaseMapper<ArticleTag> {
+public interface ArticleTagMapper extends MppBaseMapper<ArticleTag> {
 
 }

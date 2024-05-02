@@ -1,11 +1,14 @@
 package jmu.lsk.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jmu.lsk.constants.SystemConstants;
 import jmu.lsk.domain.ResponseResult;
 import jmu.lsk.domain.entity.Article;
+import jmu.lsk.domain.entity.Tag;
 import jmu.lsk.domain.vo.CategoryVo;
+import jmu.lsk.domain.vo.PageVo;
 import jmu.lsk.mapper.CategoryMapper;
 import jmu.lsk.service.ArticleService;
 import jmu.lsk.service.CategoryService;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import jmu.lsk.domain.entity.Category;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -67,5 +71,20 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         List<Category> list = list(wrapper);
         List<CategoryVo> categoryVos = BeanCopyUtils.copyBeanList(list, CategoryVo.class);
         return categoryVos;
+    }
+
+    @Override
+    public ResponseResult pageCategoryList(Integer pageNum, Integer pageSize, String name, String status) {
+        LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(StringUtils.hasText(name),Category::getName,name);
+        queryWrapper.eq(StringUtils.hasText(status),Category::getStatus,status);
+
+        Page<Category> page = new Page<>();
+        page.setCurrent(pageNum);
+        page.setSize(pageSize);
+        page(page, queryWrapper);
+        //封装数据返回
+        PageVo pageVo = new PageVo(page.getRecords(),page.getTotal());
+        return ResponseResult.okResult(pageVo);
     }
 }

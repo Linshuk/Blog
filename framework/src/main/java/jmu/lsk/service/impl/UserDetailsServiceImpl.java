@@ -2,6 +2,7 @@ package jmu.lsk.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
+import jmu.lsk.constants.SystemConstants;
 import jmu.lsk.domain.LoginUser;
 import jmu.lsk.domain.entity.SysUser;
 import jmu.lsk.mapper.SysUserMapper;
@@ -10,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Objects;
 
 //当huanf-blog的BlogLoginServiceImpl类封装好登录的用户名和密码之后，就会传到当前这个实现类
@@ -20,6 +23,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     //UserMapper是我们在huanf-framework工程mapper目录的接口
     SysUserMapper userMapper;
 
+    @Autowired
+    SysMenuServiceImpl sysMenuMapper;
     @Override
     //在这里之前，我们已经拿到了登录的用户名和密码。UserDetails是SpringSecurity官方提供的接口
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -35,8 +40,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         //TODO 查询权限信息，并封装
 
+        if(user.getType().equals(SystemConstants.ADMAIN)){
+            ;
+            List<String> list = sysMenuMapper.selectPermsByUserId(user.getId());
+            return new LoginUser(user,list);
+        }
         //返回查询到的用户信息。注意下面那行直接返回user会报错，我们需要在huanf-framework工程的domain目录新
         //建LoginUser类，在LoginUser类实现UserDetails接口，然后下面那行就返回LoginUser对象
-        return new LoginUser(user);
+        return new LoginUser(user,null);
     }
 }

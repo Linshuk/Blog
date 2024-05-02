@@ -3,6 +3,7 @@ package jmu.lsk.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import jmu.lsk.domain.ResponseResult;
 import jmu.lsk.domain.dto.AddArticleDto;
+import jmu.lsk.domain.dto.TagListDto;
 import jmu.lsk.domain.entity.Article;
 import org.springframework.context.annotation.Lazy;
 
@@ -24,5 +25,9 @@ public interface ArticleService extends IService<Article> {
     ResponseResult updateViewCount(Long id);
 
     ResponseResult add(AddArticleDto article);
+
+    ResponseResult articleList(Integer pageNum, Integer pageSize, String title, String summary);
+
+    ResponseResult updateArticle(AddArticleDto addArticleDto);
 }
 

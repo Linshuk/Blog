@@ -1,6 +1,7 @@
 package jmu.lsk.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.github.jeffreyning.mybatisplus.service.IMppService;
 import jmu.lsk.domain.entity.ArticleTag;
 
 
@@ -10,6 +11,6 @@ import jmu.lsk.domain.entity.ArticleTag;
  * @author makejava
  * @since 2024-04-30 18:41:16
  */
-public interface ArticleTagService extends IService<ArticleTag> {
+public interface ArticleTagService extends IMppService<ArticleTag> {
 
 }

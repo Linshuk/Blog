@@ -1,7 +1,7 @@
 package jmu.lsk.service.impl;
 
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.jeffreyning.mybatisplus.service.MppServiceImpl;
 import jmu.lsk.domain.entity.ArticleTag;
 import jmu.lsk.mapper.ArticleTagMapper;
 import jmu.lsk.service.ArticleTagService;
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2024-04-30 18:41:16
  */
 @Service("articleTagService")
-public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, ArticleTag> implements ArticleTagService {
+public class ArticleTagServiceImpl extends MppServiceImpl<ArticleTagMapper, ArticleTag> implements ArticleTagService {
 
 }

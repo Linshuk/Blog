@@ -1,6 +1,9 @@
 package jmu.lsk.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import jmu.lsk.domain.ResponseResult;
+import jmu.lsk.domain.dto.AddRoleDto;
+import jmu.lsk.domain.dto.RoleStatusDto;
 import jmu.lsk.domain.entity.SysRole;
 
 import java.util.List;
@@ -14,5 +17,15 @@ import java.util.List;
  */
 public interface SysRoleService extends IService<SysRole> {
 
+     ResponseResult pageRoleList(Integer pageNum, Integer pageSize, String status, String roleName);
+
     List<String> selectRoleKeyByUserId(Long id);
+
+    ResponseResult updateRoleStatus(RoleStatusDto roleStatusDto);
+
+    ResponseResult addRole(AddRoleDto addRoleDto);
+
+    ResponseResult updateRole(AddRoleDto addRoleDto);
+
+    ResponseResult deleteRole(Long id);
 }

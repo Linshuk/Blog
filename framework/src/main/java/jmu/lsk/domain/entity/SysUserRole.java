@@ -3,7 +3,6 @@ package jmu.lsk.domain.entity;
 
 import java.io.Serializable;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.github.jeffreyning.mybatisplus.anno.MppMultiId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,23 +10,22 @@ import lombok.NoArgsConstructor;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 /**
- * 文章标签关联表(ArticleTag)表实体类
+ * 用户和角色关联表(SysUserRole)表实体类
  *
  * @author makejava
- * @since 2024-04-30 18:41:16
+ * @since 2024-05-03 00:01:47
  */
 @SuppressWarnings("serial")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("article_tag")
-public class ArticleTag  {
-
-
-    @MppMultiId
-    private Long articleId;
+@TableName("sys_user_role")
+public class SysUserRole  {
 
     @MppMultiId
-    private Long tagId;
+    private Long userId;
+
+    @MppMultiId
+    private Long roleId;
 
 }
